@@ -12,10 +12,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up CPython 3.13 (the parity oracle)
+      - name: Set up CPython 3.13.13 (the exact parity oracle this crate is ported from)
         uses: actions/setup-python@v5
         with:
-          python-version: "3.13"
+          python-version: "3.13.13"
+
+      - name: Show Python version (for the record)
+        run: python --version
 
       - name: Set up Rust
         uses: dtolnay/rust-toolchain@stable
