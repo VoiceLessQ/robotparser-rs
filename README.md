@@ -78,6 +78,12 @@ python difftest.py     # prints "ALL MATCH - N documents, M queries agree ..." o
 [`difftest.py`](difftest.py) drives both it and the reference module and diffs the output line by
 line. The current corpus is 21 documents / 4,578 query comparisons.
 
+Beyond that corpus, the crate is cross-checked against the scenarios in CPython's own upstream
+[`test_robotparser.py`](https://github.com/python/cpython/blob/v3.13.13/Lib/test/test_robotparser.py)
+— the same tests CPython ships: all 16 scenarios / 125
+`can_fetch`/`crawl_delay`/`request_rate`/`site_maps` checks agree, and CPython 3.13.13 itself agrees
+with the suite's asserted `Allow`/`Disallow` labels.
+
 ## License
 
 Licensed under the [MIT License](LICENSE-MIT).
