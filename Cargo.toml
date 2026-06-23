@@ -1,0 +1,14 @@
+[package]
+name = "robotparser-rs"
+version = "0.1.0"
+edition = "2024"
+description = "A faithful Rust port of Python's urllib.robotparser: parse robots.txt and answer can_fetch/crawl_delay/request_rate, byte-for-byte compatible with CPython."
+license = "MIT"
+repository = "https://github.com/VoiceLessQ/robotparser-rs"
+readme = "README.md"
+keywords = ["robots", "robotstxt", "crawler", "urllib", "robotparser"]
+categories = ["web-programming", "parser-implementations"]
+
+[dependencies]
+# The percent-encoding / urlsplit primitives robotparser is built on; same Python-parity port.
+urlparse-rs = { version = "0.1", path = "../urlparse-rs" }
