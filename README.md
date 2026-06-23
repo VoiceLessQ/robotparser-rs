@@ -1,5 +1,7 @@
 # robotparser-rs
 
+[![CI](https://github.com/VoiceLessQ/robotparser-rs/actions/workflows/ci.yml/badge.svg)](https://github.com/VoiceLessQ/robotparser-rs/actions/workflows/ci.yml)
+
 A **faithful** Rust port of Python's
 [`urllib.robotparser`](https://docs.python.org/3/library/urllib.robotparser.html) — parse a
 `robots.txt` file and answer `can_fetch` / `crawl_delay` / `request_rate` / `site_maps`. Behaviour
@@ -57,6 +59,24 @@ Requires a Rust toolchain with 2024-edition support (Rust 1.85 or newer).
 The deliberate non-goals match CPython's own: no Google `*`/`$` wildcard expansion, and the
 network `read()` path is left to the caller. (A few Unicode corner cases of `str.isdigit()` and
 `str.lower()` are not modelled, matching only ASCII there.)
+
+## Verification
+
+Faithfulness isn't a claim here — it's checked on every push. CI exercises the crate over a corpus
+of robots.txt documents and queries and compares **every result against Python's own
+`urllib.robotparser`** (CPython 3.13); the build fails on any divergence. The green badge above
+means the port currently matches CPython exactly across the whole corpus.
+
+Reproduce it locally (needs Python 3.13 on `PATH`):
+
+```sh
+cargo build
+python difftest.py     # prints "ALL MATCH - N documents, M queries agree ..." on success
+```
+
+[`src/bin/diff.rs`](src/bin/diff.rs) exposes the crate over a small stdin protocol;
+[`difftest.py`](difftest.py) drives both it and the reference module and diffs the output line by
+line. The current corpus is 21 documents / 4,578 query comparisons.
 
 ## License
 

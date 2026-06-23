@@ -8,7 +8,9 @@ repository = "https://github.com/VoiceLessQ/robotparser-rs"
 readme = "README.md"
 keywords = ["robots", "robotstxt", "crawler", "urllib", "robotparser"]
 categories = ["web-programming", "parser-implementations"]
+# Keep the published crate library-only; the differential harness and CI live in the repo only.
+exclude = ["/difftest.py", "/src/bin", "/.github"]
 
 [dependencies]
 # The percent-encoding / urlsplit primitives robotparser is built on; same Python-parity port.
-urlparse-rs = { version = "0.1", path = "../urlparse-rs" }
+urlparse-rs = "0.1"

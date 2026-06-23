@@ -36,6 +36,8 @@ dependencies = [
 [[package]]
 name = "urlparse-rs"
 version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e7e24e45686cb5dcd8ae145d29dca881dc3335943130f4671b718737f3f6f5e4"
 dependencies = [
  "unicode-normalization",
 ]
