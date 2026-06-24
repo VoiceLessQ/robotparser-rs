@@ -2,16 +2,15 @@
 
 [![CI](https://github.com/VoiceLessQ/robotparser-rs/actions/workflows/ci.yml/badge.svg)](https://github.com/VoiceLessQ/robotparser-rs/actions/workflows/ci.yml)
 
-A **faithful** Rust port of Python's
-[`urllib.robotparser`](https://docs.python.org/3/library/urllib.robotparser.html) — parse a
-`robots.txt` file and answer `can_fetch` / `crawl_delay` / `request_rate` / `site_maps`. Behaviour
+A Rust port of Python's
+[`urllib.robotparser`](https://docs.python.org/3/library/urllib.robotparser.html). Parses a
+`robots.txt` file and answers `can_fetch` / `crawl_delay` / `request_rate` / `site_maps`. Behaviour
 is verified against the reference `urllib.robotparser` module itself across thousands of queries.
 
-The point of this crate is **CPython parity**, not a fresh interpretation of the spec. It mirrors
-what CPython actually does today: a **prefix-match, first-match** algorithm (no `*`/`$` wildcards,
+The goal is **CPython parity**: mirroring what CPython actually does today. That means a **prefix-match, first-match** algorithm (no `*`/`$` wildcards,
 no longest-match precedence), with CPython's exact path normalization, parse state machine, and
-user-agent substring matching. If you are porting Python code and need identical decisions, this
-matches; a WHATWG/Google-spec parser would not.
+user-agent substring matching. This is the right choice when porting Python code that needs identical
+decisions; a WHATWG/Google-spec parser behaves differently.
 
 ## Usage
 
@@ -49,7 +48,7 @@ Requires a Rust toolchain with 2024-edition support (Rust 1.85 or newer).
   `starts_with` the rule's path, and the first applicable `Allow`/`Disallow` decides. An empty
   `Disallow:` means allow-all.
 - **Path normalization** round-trips percent-encoding (`quote(unquote(path))`) and, within a
-  `?query`, normalizes each run of non-`=&` characters — implemented byte-exactly via the
+  `?query`, normalizes each run of non-`=&` characters, implemented byte-exactly via the
   [`urlparse-rs`](https://crates.io/crates/urlparse-rs) primitives this crate is built on.
 - **User-agent matching** lowercases the agent token (up to the first `/`) and tests each entry's
   agents as substrings; `*` is the catch-all, used only when no specific entry applies.
@@ -62,10 +61,10 @@ network `read()` path is left to the caller. (A few Unicode corner cases of `str
 
 ## Verification
 
-Faithfulness isn't a claim here — it's checked on every push. CI exercises the crate over a corpus
-of robots.txt documents and queries and compares **every result against Python's own
-`urllib.robotparser`** (CPython 3.13); the build fails on any divergence. The green badge above
-means the port currently matches CPython exactly across the whole corpus.
+Correctness is checked on every push. CI exercises the crate over a corpus of robots.txt documents
+and queries and compares **every result against Python's own `urllib.robotparser`** (CPython 3.13);
+the build fails on any divergence. The green badge above means the port currently matches CPython
+exactly across the whole corpus.
 
 Reproduce it locally (needs Python 3.13 on `PATH`):
 
@@ -79,8 +78,8 @@ python difftest.py     # prints "ALL MATCH - N documents, M queries agree ..." o
 line. The current corpus is 21 documents / 4,578 query comparisons.
 
 Beyond that corpus, the crate is cross-checked against the scenarios in CPython's own upstream
-[`test_robotparser.py`](https://github.com/python/cpython/blob/v3.13.13/Lib/test/test_robotparser.py)
-— the same tests CPython ships: all 16 scenarios / 125
+[`test_robotparser.py`](https://github.com/python/cpython/blob/v3.13.13/Lib/test/test_robotparser.py),
+the same tests CPython ships: all 16 scenarios / 125
 `can_fetch`/`crawl_delay`/`request_rate`/`site_maps` checks agree, and CPython 3.13.13 itself agrees
 with the suite's asserted `Allow`/`Disallow` labels.
 
